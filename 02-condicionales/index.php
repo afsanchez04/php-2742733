@@ -1,0 +1,5 @@
+<?php
+
+echo 'Ejecutando condicionales...';
+
+?>
