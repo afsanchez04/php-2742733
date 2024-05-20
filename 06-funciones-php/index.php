@@ -7,9 +7,9 @@ echo "ejecutando.php";
 
 function validarEdad($edad)
 {
-    if ($edad >= 18) {
+    if ($edad && $edad >= 18) {
         echo "<br> mayor de edad";
-    } else if ($edad < 18) {
+    } else if ($edad && $edad < 18) {
         echo "<br> menor de edad";
     }else {
         echo "<br> no se que decir";
