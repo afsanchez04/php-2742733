@@ -1,5 +1,9 @@
 <?php session_start();
 
+#1. Crear una base de datos que se llame 'focaapp' y una tabla que se llame 'usersapp'
+#2. Columnas: ID,username, correo, contraseña
+#3. en registro.php conectar con base de datos y hacer un ISERT INTO en la tabla 'usersapp' cuando le den click en registrarse
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $usuario = $_POST['user'];
@@ -14,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['passRegister'] = $password;
         //echo ' - varibales de sesión guardadas 😎';
         //header('Location: index.php');
+   
     }
 }
 
