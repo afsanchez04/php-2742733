@@ -1,25 +1,62 @@
 <?php session_start();
 
-if( $_SERVER["REQUEST_METHOD"] == 'POST' ){
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $usuario = $_POST['user'];
     $password = $_POST['password'];
 
-    $user_register = isset( $_SESSION['userRegister'] ) ? $_SESSION['userRegister'] : null;
-    $pass_register = isset( $_SESSION['passRegister'] ) ? $_SESSION['passRegister'] : null;
+    $user_register = isset($_SESSION['userRegister']) ? $_SESSION['userRegister'] : null;
+    $pass_register = isset($_SESSION['passRegister']) ? $_SESSION['passRegister'] : null;
 
     //Para verificar que se envíen todos los datos
-    if( empty($usuario) or empty($password) ){
+    if (empty($usuario) or empty($password)) {
         echo 'Rellene completo el formulario';
-    }else{
+    } else {
+
+        try {
+            $conexion = new PDO("mysql: host=localhost; dbname=focaapp", 'root', '');
+            echo "Conexión OK";
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+
+        $statement = $conexion->prepare("SELECT * FROM `usersapp` WHERE username = :user");
+
+        $statement->execute(array(':user' => $usuario));
+
+        $result = $statement->fetch();
+
+        if ($result) {
+            echo 'true';
+            $_SESSION['userRegister'] = $usuario;
+            $_SESSION['passRegister'] = $password;
+            $_SESSION['correoRegister'] = $correo;
+            header('Location: user.php');
+        } else {
+            echo 'false';
+        }
+
+
+        /* if( count($result) ){
+            echo 'usuario encontrado';
+            print_r($result);
+        }else{
+            echo 'no se encontró user';
+        } */
+
+
+
+        /*  foreach ($result as $item) {
+            print_r($result);
+        } */
+
         //echo $usuario . ' - ' . $password;
-        if( $usuario == $user_register && $password == $pass_register ){
+        /* if( $usuario == $user_register && $password == $pass_register ){
             echo 'listo, iniciaste sesión 😊';
             header('Location: user.php');
         }else{
             echo 'Tu usuario no existe 😖';
-        }
+        } */
     }
-
 }
 
 ?>

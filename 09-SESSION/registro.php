@@ -8,17 +8,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $usuario = $_POST['user'];
     $password = $_POST['password'];
+    $correo = $_POST['correo'];
 
     //Para verificar que se envíen todos los datos
-    if( empty($usuario) or empty($password) ){
+    if (empty($usuario) or empty($password) or empty($correo)) {
         echo 'Rellene completo el formulario';
-    }else{
+    } else {
         //echo $usuario . ' - ' . $password;
-        $_SESSION['userRegister'] = $usuario;
+        /* $_SESSION['userRegister'] = $usuario;
         $_SESSION['passRegister'] = $password;
+        $_SESSION['correoRegister'] = $correo; */
         //echo ' - varibales de sesión guardadas 😎';
         //header('Location: index.php');
-   
+        try {
+            $conexion = new PDO("mysql: host=localhost; dbname=focaapp", 'root', '');
+            echo "Conexión OK";
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        //Vamos a preparar una sentencia SQL y la guardamos en una variable
+
+        $statement = $conexion->prepare(" INSERT INTO `usersapp` (`ID`, `username`, `correo`,`password`) VALUES (NULL, :user, :correo, :pass) ");
+
+        //ejecutar el statement
+        $statement->execute(array(':user' => $usuario, ':correo' => $correo, ':pass' => $password));
     }
 }
 
@@ -42,12 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form action="registro.php" method="POST">
         <label for="user">User</label>
         <input type="text" placeholder="User" name="user">
+        <label for="correo">Correo</label>
+        <input type="email" placeholder="Correo" name="correo">
         <label for="password">Password</label>
         <input type="password" placeholder="Password" name="password">
         <button type="submit">Registrarse</button>
     </form>
 
-    <?php if( isset($_SESSION['userRegister']) ) : ?>
+    <?php if (isset($_SESSION['userRegister'])) : ?>
         <p>Datos registrados, ya puedes iniciar sesión</p>
         <p> <?php echo $_SESSION['userRegister'] . ' - ' . $_SESSION['passRegister'];  ?> </p>
         <a href="index.php">Iniciar sesión</a>
