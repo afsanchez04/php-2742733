@@ -19,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             echo 'Error: ' . $e->getMessage();
         }
 
-        $statement = $conexion->prepare("SELECT * FROM `usersapp` WHERE username = :user");
+        $statement = $conexion->prepare("SELECT * FROM `usersapp` WHERE username = :user AND password = :pass");
 
-        $statement->execute(array(':user' => $usuario));
+        $statement->execute(array(':user' => $usuario, ':pass' => $password));
 
         $result = $statement->fetch();
 
@@ -29,11 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             echo 'true';
             $_SESSION['userRegister'] = $usuario;
             $_SESSION['passRegister'] = $password;
-            $_SESSION['correoRegister'] = $correo;
             header('Location: user.php');
-        } else {
-            echo 'false';
-        }
+        } else {echo 'false';}
 
 
         /* if( count($result) ){
